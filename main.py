@@ -46,6 +46,9 @@
         Подсказка: Используйте цикл while и запрос на ввод "Хотите сыграть снова? (да/нет)".
 """
 
+import random
+
+
 HANGMANPICS = [
     """
   +---+
@@ -202,3 +205,49 @@ COMMON_NOUNS = [
     "участие",
 ]
 
+def main():
+    print("День добрый! Играем в виселицу")
+
+    random_slovo = list(random.choice(COMMON_NOUNS))    
+    print("".join(random_slovo))
+
+    popbitka = 7
+    letter = []
+    playfield = []
+    for i in random_slovo:
+        playfield.append("_")
+
+    while True:
+        print(f"В вашем слове {len(random_slovo)} букв")
+        bukva = input("Введите ОДНУ букву: ")
+
+        if len(bukva) != 1:
+            print("Пожалуйста введите только 1 букву")
+            continue
+
+        if bukva in letter:
+            print("Буква уже была.")
+            continue
+        else:
+            letter.append(bukva)
+
+        if bukva in random_slovo:
+            for i in range(len(playfield)):
+                if random_slovo[i] == bukva:
+                    playfield[i] = bukva
+            print(playfield)
+        
+        if bukva not in random_slovo: 
+            popbitka -= 1
+            print(f"Вы ошиблись, попыток осталось {popbitka}")
+            if popbitka == 0:
+                break    
+            elif random_slovo != playfield:
+                print(HANGMANPICS[len(HANGMANPICS) - popbitka])
+        elif random_slovo == playfield:
+            print("Вы одержали победу")    
+            break
+
+        if random_slovo == playfield:
+            break
+main()
